@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calculator</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#calculate-btn").click(function() {
+                var operators = $("#operators").val();
+                var operands = $("#operands").val();
+
+                var requestData = {
+                    "operators": operators,
+                    "operands": operands
+                };
+
+                $.ajax({
+                    url: "/calculate",
+                    type: "POST",
+                    data: JSON.stringify(requestData),
+                    contentType: "application/json",
+                    success: function(response) {
+                        $("#result").text(response.result);
+                        $("#color").text(response.color);
+                        $("#color").css("color", response.color);
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(error);
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>Calculator</h1>
+    <div>
+        <label for="operators">Operators:</label>
+        <input type="text" id="operators" name="operators">
+    </div>
+    <div>
+        <label for="operands">Operands (comma-separated):</label>
+        <input type="text" id="operands" name="operands">
+    </div>
+    <div>
+        <button id="calculate-btn">Calculate</button>
+    </div>
+    <div>
+        <h2>Result:</h2>
+        <p id="result"></p>
+        <h2>Color:</h2>
+        <p id="color"></p>
+    </div>
+</body>
+</html>
